@@ -10,7 +10,7 @@ namespace Postgraduates.utils.file.Exporter
 {
     internal class HtmlExporter : IExporter
     {
-        public void EportTable(DataTable table, string path)
+        public void ExportTable(DataTable table, string path)
         {
             var sb = new StringBuilder();
 
@@ -25,6 +25,7 @@ namespace Postgraduates.utils.file.Exporter
             sb.Append("<table>");
             sb.Append("<thead>");
             sb.Append("<tr>");
+
             foreach (DataColumn column in table.Columns)
             {
                 sb.Append("<th>");
@@ -44,6 +45,7 @@ namespace Postgraduates.utils.file.Exporter
                 }
                 sb.Append("</tr>");
             }
+
             sb.Append("</table>");
             sb.Append("</body>");
             sb.Append("</html>");
