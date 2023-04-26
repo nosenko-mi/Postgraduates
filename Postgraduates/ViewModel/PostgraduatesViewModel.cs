@@ -35,13 +35,6 @@ namespace Postgraduates.ViewModel
         {
             XDocument xml = XDocument.Load(_filePath); // Load the XML document
 
-            //var query =
-            //    from postgrad in xml.Descendants("Postgrad")
-            //    where (string)postgrad.Element(queryParams[1]) == queryParams[0]
-            //    select postgrad;
-            //var converter = new PostgradConverter();
-            //var list = converter.ToList(query);
-
             var list = _repository.RunQuery(queryParams);
             var converter = new PostgradConverter();
             var table = converter.ToDataTable(list);

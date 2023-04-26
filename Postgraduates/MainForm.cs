@@ -25,8 +25,8 @@ namespace Postgraduates
         {
             InitializeComponent();
 
-            this._filePath = "";
-            this.textChanged = false;
+            _filePath = "";
+            textChanged = false;
 
         }
 
@@ -203,19 +203,6 @@ namespace Postgraduates
             var queryParams = CollectQueryData();
             var table = _viewModel.RunQuery(queryParams);
             dataGridView.DataSource = table;
-            //XDocument xml = XDocument.Load(_filePath); // Load the XML document
-
-            //var query =
-            //    from postgrad in xml.Descendants("Postgrad")
-            //    where (string)postgrad.Element(queryParams[1]) == queryParams[0]
-            //    select postgrad;
-
-            //// Iterate through the results of the query
-            //foreach (var result in query)
-            //{
-            //    // Do something with the result
-            //    MessageBox.Show(result.Element("Name").Value);
-            //}
         }
 
         private string[] CollectQueryData()

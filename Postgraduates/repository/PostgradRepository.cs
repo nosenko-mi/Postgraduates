@@ -34,7 +34,7 @@ namespace Postgraduates.repository
                     val = int.Parse(queryParams[0].Substring(1, queryParams[0].Length - 1));
                     query =
                         from postgrad in xml.Descendants("Postgrad")
-                        where (int)postgrad.Element(queryParams[1]) >= val
+                        where (int)postgrad.Element(queryParams[1]) > val
                         select postgrad;
                 } catch (Exception ex)
                 {
@@ -49,7 +49,7 @@ namespace Postgraduates.repository
                     val = int.Parse(queryParams[0].Substring(1, queryParams[0].Length-1));
                     query =
                         from postgrad in xml.Descendants("Postgrad")
-                        where (int)postgrad.Element(queryParams[1]) <= val
+                        where (int)postgrad.Element(queryParams[1]) < val
                         select postgrad;
                 }
                 catch (Exception ex)
