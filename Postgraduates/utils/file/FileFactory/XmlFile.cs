@@ -1,4 +1,5 @@
 ﻿using Postgraduates.model;
+using Postgraduates.utils.Converter;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -18,6 +19,7 @@ namespace Postgraduates.utils.file.FileFactory
         public XmlFile(string text) : base(text) {}
 
         private XmlDocument _document = new XmlDocument();
+        private PostgraduatesType _type = PostgraduatesType.Unknown;
 
         override public void Save(string path)
         {
@@ -42,6 +44,11 @@ namespace Postgraduates.utils.file.FileFactory
             return builder.ToString();
         }
 
+        public PostgraduatesType GetType()
+        {
+            return _type;
+        }
+
         public List<Postgrad>? TryParsePostgrads(string path)
         {
             XDocument xmlDoc = XDocument.Load(path);
@@ -49,6 +56,7 @@ namespace Postgraduates.utils.file.FileFactory
             {
                 return null;
             }
+            _type = PostgraduatesType.Postgrad;
             var list = xmlDoc.Root.Elements()
                                        .Select(x => new Postgrad
                                        {
@@ -73,7 +81,7 @@ namespace Postgraduates.utils.file.FileFactory
                 return null;
             }
             Debugger.Log(1, "xmldocument", xRoot.Name);
-
+            _type = PostgraduatesType.Exam;
             return null;
         }
     }

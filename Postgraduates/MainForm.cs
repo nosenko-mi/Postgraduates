@@ -1,8 +1,15 @@
+using Postgraduates.model;
+using Postgraduates.utils;
+using Postgraduates.utils.Converter;
+using Postgraduates.utils.file.Exporter;
 using Postgraduates.utils.file.FileFactory;
 using Postgraduates.utils.file.FileReader;
 using Postgraduates.ViewModel;
+using System.Data;
 using System.Diagnostics;
 using System.Windows.Forms;
+using System.Xml.Linq;
+using static System.Windows.Forms.DataFormats;
 
 namespace Postgraduates
 {
@@ -10,10 +17,9 @@ namespace Postgraduates
     {
         private string _filePath;
         private bool textChanged;
-        private string _previousText = string.Empty;
         private static readonly FileFactory _defaultFactory = new TextFileFactory();
         private FileFactory _factory = _defaultFactory;
-        private PostgradViewModel _postgradViewModel = new PostgradViewModel();
+        private PostgraduatesViewModel _viewModel = new PostgraduatesViewModel();
 
         public MainForm()
         {
@@ -24,14 +30,29 @@ namespace Postgraduates
 
         }
 
+        private void RenderQueryLayout(PostgraduatesType type)
+        {
+            foreach (DataGridViewColumn column in dataGridView.Columns)
+            {
+                Label lbl = new Label();
+                lbl.Name = column.HeaderText + "QueryLabel";
+                lbl.Text = column.HeaderText;
+                flowLayoutPanel.Controls.Add(lbl);
+
+                TextBox txt = new TextBox();
+                txt.Name = column.HeaderText + "QueryTextBox";
+                txt.Text = "";
+                flowLayoutPanel.Controls.Add(txt);
+            }
+        }
+
         private void WriteText(string filePath)
         {
             this._filePath = filePath;
             // get content
-            string content = textEditor.Text;
             // Get file from factory
             // Save file
-            _factory.SaveFile(filePath, content);
+            //_factory.SaveFile(filePath, content);
 
             //System.IO.File.WriteAllText(this.filePath, this.textEditor.Text);
             this.textChanged = false;
@@ -84,7 +105,6 @@ namespace Postgraduates
         private void newToolStripMenuItem_Click(object sender, EventArgs e)
         {
             this.SaveChanges();
-            this.textEditor.Clear();
             this.textChanged = false;
         }
 
@@ -95,32 +115,23 @@ namespace Postgraduates
                 SaveChanges();
                 _filePath = openFileDialog.FileName;
 
-                // Get file extension
                 FileInfo fileInfo = new FileInfo(_filePath);
                 string ext = fileInfo.Extension;
-
                 if (ext != ".xml")
                 {
+                    _filePath = "";
                     MessageBox.Show(
-                        "File extenction is not supported. Try opening .xml file", 
-                        "Extention error", 
-                        MessageBoxButtons.OK, 
+                        "File extention is not supported. Try opening .xml file",
+                        "Extention error",
+                        MessageBoxButtons.OK,
                         MessageBoxIcon.Error);
                     return;
                 }
-                // Get factory
-                //FileReader reader = new FileReader(new XmlFileReader());
-                // Read file
-                //string text = reader.ReadFile(_filePath);
 
-                // No need in abstract factory because xml structure is required
-                XmlFile file = new XmlFile();
-                string text = file.Read(_filePath);
-                file.TryParsePostgrads(_filePath);
-
-                textEditor.Text = text;
+                var table = _viewModel.GetFromFile(_filePath);
+                dataGridView.DataSource = table;
+                RenderQueryLayout(PostgraduatesType.Postgrad);
                 textChanged = false;
-                _previousText = text;
                 _factory = _defaultFactory;
             }
         }
@@ -128,9 +139,6 @@ namespace Postgraduates
         private void textEditor_TextChanged(object sender, EventArgs e)
         {
             textChanged = true;
-
-            int lineIndex = textEditor.GetLineFromCharIndex(textEditor.SelectionStart);
-            int columnIndex = textEditor.SelectionStart - textEditor.GetFirstCharIndexOfCurrentLine();
         }
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
@@ -146,6 +154,107 @@ namespace Postgraduates
         private void saveAsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             this.SaveAs();
+        }
+
+        private void searchButton_Click(object sender, EventArgs e)
+        {
+            DataTable table = _viewModel.FindInTable(searchTextBox.Text);
+            dataGridView.DataSource = table;
+        }
+
+        private void clearSearchButton_Click(object sender, EventArgs e)
+        {
+            searchTextBox.Text = "";
+            DataTable table = _viewModel.GetTable();
+            dataGridView.DataSource = table;
+        }
+
+        private void hTMLToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (dataGridView.DataSource == null)
+            {
+                MessageBox.Show(
+                    "Table is empty",
+                    "Export error",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+                return;
+            }
+
+            saveFileDialog.Filter = SaveFilters.HTML;
+            if (saveFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                var exporter = new HtmlExporter();
+                exporter.EportTable(
+                    (DataTable)(dataGridView.DataSource),
+                    saveFileDialog.FileName);
+            }
+
+        }
+
+        private void searchButton_Click_1(object sender, EventArgs e)
+        {
+            DataTable table = _viewModel.FindInTable(searchTextBox.Text);
+            dataGridView.DataSource = table;
+        }
+
+        private void runQuerryButton_Click(object sender, EventArgs e)
+        {
+            var queryParams = CollectQueryData();
+            var table = _viewModel.RunQuery(queryParams);
+            dataGridView.DataSource = table;
+            //XDocument xml = XDocument.Load(_filePath); // Load the XML document
+
+            //var query =
+            //    from postgrad in xml.Descendants("Postgrad")
+            //    where (string)postgrad.Element(queryParams[1]) == queryParams[0]
+            //    select postgrad;
+
+            //// Iterate through the results of the query
+            //foreach (var result in query)
+            //{
+            //    // Do something with the result
+            //    MessageBox.Show(result.Element("Name").Value);
+            //}
+        }
+
+        private string[] CollectQueryData()
+        {
+            string[] result = new string[2];
+            bool isSelected = false;
+            foreach (Control c in flowLayoutPanel.Controls)
+            {
+                if (c is TextBox && c.Text.Length > 0)
+                {
+                    if (isSelected)
+                    {
+                        MessageBox.Show(
+                            "Query can be performed only by 1 field.\nThe last filled will be used in query",
+                            "Querry warning",
+                            MessageBoxButtons.OK,
+                            MessageBoxIcon.Exclamation);
+                    }
+                    result[0] = c.Text;
+                    string name = c.Name.ToString();
+                    name = name.Substring(0, name.Length - 12);
+                    result[1] = name;
+                    isSelected = true;
+                }
+            }
+            return result;
+        }
+
+        private void clearQueryButton_Click(object sender, EventArgs e)
+        {
+            foreach (Control c in flowLayoutPanel.Controls)
+            {
+                if (c is TextBox && c.Text.Length > 0)
+                {
+                    c.Text = "";
+                }
+            }
+            DataTable table = _viewModel.GetTable();
+            dataGridView.DataSource = table;
         }
     }
 }

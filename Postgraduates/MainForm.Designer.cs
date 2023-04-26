@@ -36,6 +36,8 @@
             toolStripSeparator4 = new ToolStripSeparator();
             saveToolStripMenuItem = new ToolStripMenuItem();
             saveAsToolStripMenuItem = new ToolStripMenuItem();
+            exportToolStripMenuItem = new ToolStripMenuItem();
+            hTMLToolStripMenuItem = new ToolStripMenuItem();
             toolStripSeparator3 = new ToolStripSeparator();
             exitToolStripMenuItem = new ToolStripMenuItem();
             editToolStripMenuItem = new ToolStripMenuItem();
@@ -49,16 +51,28 @@
             saveFileDialog = new SaveFileDialog();
             fontDialog = new FontDialog();
             splitContainer1 = new SplitContainer();
+            splitContainer2 = new SplitContainer();
             searchGroupBox = new GroupBox();
+            clearSearchButton = new Button();
             searchButton = new Button();
             searchTextBox = new TextBox();
-            textEditor = new RichTextBox();
+            queryGroupBox = new GroupBox();
+            flowLayoutPanel = new FlowLayoutPanel();
+            runQuerryButton = new Button();
+            dataGridView = new DataGridView();
+            clearQueryButton = new Button();
             mainMenu.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
             splitContainer1.Panel1.SuspendLayout();
             splitContainer1.Panel2.SuspendLayout();
             splitContainer1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)splitContainer2).BeginInit();
+            splitContainer2.Panel1.SuspendLayout();
+            splitContainer2.Panel2.SuspendLayout();
+            splitContainer2.SuspendLayout();
             searchGroupBox.SuspendLayout();
+            queryGroupBox.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)dataGridView).BeginInit();
             SuspendLayout();
             // 
             // mainMenu
@@ -73,13 +87,14 @@
             // 
             // fileToolStripMenuItem
             // 
-            fileToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { newToolStripMenuItem, toolStripSeparator2, openToolStripMenuItem, toolStripSeparator4, saveToolStripMenuItem, saveAsToolStripMenuItem, toolStripSeparator3, exitToolStripMenuItem });
+            fileToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { newToolStripMenuItem, toolStripSeparator2, openToolStripMenuItem, toolStripSeparator4, saveToolStripMenuItem, saveAsToolStripMenuItem, exportToolStripMenuItem, toolStripSeparator3, exitToolStripMenuItem });
             fileToolStripMenuItem.Name = "fileToolStripMenuItem";
             fileToolStripMenuItem.Size = new Size(37, 20);
             fileToolStripMenuItem.Text = "&File";
             // 
             // newToolStripMenuItem
             // 
+            newToolStripMenuItem.Enabled = false;
             newToolStripMenuItem.Name = "newToolStripMenuItem";
             newToolStripMenuItem.Size = new Size(112, 22);
             newToolStripMenuItem.Text = "&New";
@@ -104,6 +119,7 @@
             // 
             // saveToolStripMenuItem
             // 
+            saveToolStripMenuItem.Enabled = false;
             saveToolStripMenuItem.Name = "saveToolStripMenuItem";
             saveToolStripMenuItem.Size = new Size(112, 22);
             saveToolStripMenuItem.Text = "&Save";
@@ -111,10 +127,25 @@
             // 
             // saveAsToolStripMenuItem
             // 
+            saveAsToolStripMenuItem.Enabled = false;
             saveAsToolStripMenuItem.Name = "saveAsToolStripMenuItem";
             saveAsToolStripMenuItem.Size = new Size(112, 22);
             saveAsToolStripMenuItem.Text = "Save &as";
             saveAsToolStripMenuItem.Click += saveAsToolStripMenuItem_Click;
+            // 
+            // exportToolStripMenuItem
+            // 
+            exportToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { hTMLToolStripMenuItem });
+            exportToolStripMenuItem.Name = "exportToolStripMenuItem";
+            exportToolStripMenuItem.Size = new Size(112, 22);
+            exportToolStripMenuItem.Text = "Export";
+            // 
+            // hTMLToolStripMenuItem
+            // 
+            hTMLToolStripMenuItem.Name = "hTMLToolStripMenuItem";
+            hTMLToolStripMenuItem.Size = new Size(106, 22);
+            hTMLToolStripMenuItem.Text = "HTML";
+            hTMLToolStripMenuItem.Click += hTMLToolStripMenuItem_Click;
             // 
             // toolStripSeparator3
             // 
@@ -182,36 +213,65 @@
             // 
             // splitContainer1.Panel1
             // 
-            splitContainer1.Panel1.Controls.Add(searchGroupBox);
+            splitContainer1.Panel1.Controls.Add(splitContainer2);
             // 
             // splitContainer1.Panel2
             // 
-            splitContainer1.Panel2.Controls.Add(textEditor);
+            splitContainer1.Panel2.Controls.Add(dataGridView);
             splitContainer1.Size = new Size(1124, 656);
             splitContainer1.SplitterDistance = 292;
             splitContainer1.TabIndex = 4;
             // 
+            // splitContainer2
+            // 
+            splitContainer2.Dock = DockStyle.Fill;
+            splitContainer2.Location = new Point(0, 0);
+            splitContainer2.Name = "splitContainer2";
+            splitContainer2.Orientation = Orientation.Horizontal;
+            // 
+            // splitContainer2.Panel1
+            // 
+            splitContainer2.Panel1.Controls.Add(searchGroupBox);
+            // 
+            // splitContainer2.Panel2
+            // 
+            splitContainer2.Panel2.Controls.Add(queryGroupBox);
+            splitContainer2.Size = new Size(292, 656);
+            splitContainer2.SplitterDistance = 97;
+            splitContainer2.TabIndex = 0;
+            // 
             // searchGroupBox
             // 
+            searchGroupBox.Controls.Add(clearSearchButton);
             searchGroupBox.Controls.Add(searchButton);
             searchGroupBox.Controls.Add(searchTextBox);
             searchGroupBox.Dock = DockStyle.Top;
             searchGroupBox.Location = new Point(0, 0);
             searchGroupBox.Name = "searchGroupBox";
-            searchGroupBox.Size = new Size(292, 82);
-            searchGroupBox.TabIndex = 0;
+            searchGroupBox.Size = new Size(292, 99);
+            searchGroupBox.TabIndex = 3;
             searchGroupBox.TabStop = false;
             searchGroupBox.Text = "Search";
             // 
+            // clearSearchButton
+            // 
+            clearSearchButton.Location = new Point(3, 53);
+            clearSearchButton.Name = "clearSearchButton";
+            clearSearchButton.Size = new Size(93, 23);
+            clearSearchButton.TabIndex = 2;
+            clearSearchButton.Text = "Clear";
+            clearSearchButton.UseVisualStyleBackColor = true;
+            clearSearchButton.Click += clearSearchButton_Click;
+            // 
             // searchButton
             // 
-            searchButton.Dock = DockStyle.Bottom;
-            searchButton.Location = new Point(3, 56);
+            searchButton.Location = new Point(102, 53);
             searchButton.Name = "searchButton";
-            searchButton.Size = new Size(286, 23);
+            searchButton.Size = new Size(187, 23);
             searchButton.TabIndex = 1;
             searchButton.Text = "Find";
             searchButton.UseVisualStyleBackColor = true;
+            searchButton.Click += searchButton_Click;
             // 
             // searchTextBox
             // 
@@ -221,15 +281,62 @@
             searchTextBox.Size = new Size(286, 23);
             searchTextBox.TabIndex = 0;
             // 
-            // textEditor
+            // queryGroupBox
             // 
-            textEditor.Dock = DockStyle.Fill;
-            textEditor.Location = new Point(0, 0);
-            textEditor.Margin = new Padding(3, 24, 3, 3);
-            textEditor.Name = "textEditor";
-            textEditor.Size = new Size(828, 656);
-            textEditor.TabIndex = 6;
-            textEditor.Text = "";
+            queryGroupBox.Controls.Add(clearQueryButton);
+            queryGroupBox.Controls.Add(flowLayoutPanel);
+            queryGroupBox.Controls.Add(runQuerryButton);
+            queryGroupBox.Dock = DockStyle.Fill;
+            queryGroupBox.Location = new Point(0, 0);
+            queryGroupBox.Name = "queryGroupBox";
+            queryGroupBox.Size = new Size(292, 555);
+            queryGroupBox.TabIndex = 0;
+            queryGroupBox.TabStop = false;
+            queryGroupBox.Text = "Query";
+            // 
+            // flowLayoutPanel
+            // 
+            flowLayoutPanel.AutoScroll = true;
+            flowLayoutPanel.Dock = DockStyle.Top;
+            flowLayoutPanel.FlowDirection = FlowDirection.TopDown;
+            flowLayoutPanel.Location = new Point(3, 19);
+            flowLayoutPanel.Name = "flowLayoutPanel";
+            flowLayoutPanel.Size = new Size(286, 501);
+            flowLayoutPanel.TabIndex = 1;
+            // 
+            // runQuerryButton
+            // 
+            runQuerryButton.Location = new Point(211, 526);
+            runQuerryButton.Name = "runQuerryButton";
+            runQuerryButton.Size = new Size(75, 23);
+            runQuerryButton.TabIndex = 0;
+            runQuerryButton.Text = "Get";
+            runQuerryButton.UseVisualStyleBackColor = true;
+            runQuerryButton.Click += runQuerryButton_Click;
+            // 
+            // dataGridView
+            // 
+            dataGridView.AllowUserToAddRows = false;
+            dataGridView.AllowUserToDeleteRows = false;
+            dataGridView.BackgroundColor = SystemColors.ControlLight;
+            dataGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dataGridView.Dock = DockStyle.Fill;
+            dataGridView.Location = new Point(0, 0);
+            dataGridView.Name = "dataGridView";
+            dataGridView.ReadOnly = true;
+            dataGridView.RowTemplate.Height = 25;
+            dataGridView.Size = new Size(828, 656);
+            dataGridView.TabIndex = 0;
+            // 
+            // clearQueryButton
+            // 
+            clearQueryButton.Location = new Point(3, 526);
+            clearQueryButton.Name = "clearQueryButton";
+            clearQueryButton.Size = new Size(75, 23);
+            clearQueryButton.TabIndex = 2;
+            clearQueryButton.Text = "Clear";
+            clearQueryButton.UseVisualStyleBackColor = true;
+            clearQueryButton.Click += clearQueryButton_Click;
             // 
             // MainForm
             // 
@@ -241,7 +348,7 @@
             Controls.Add(mainMenu);
             MainMenuStrip = mainMenu;
             Name = "MainForm";
-            Text = "Simple Edit";
+            Text = "Postgraduates";
             FormClosing += MainForm_FormClosing;
             mainMenu.ResumeLayout(false);
             mainMenu.PerformLayout();
@@ -249,8 +356,14 @@
             splitContainer1.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)splitContainer1).EndInit();
             splitContainer1.ResumeLayout(false);
+            splitContainer2.Panel1.ResumeLayout(false);
+            splitContainer2.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)splitContainer2).EndInit();
+            splitContainer2.ResumeLayout(false);
             searchGroupBox.ResumeLayout(false);
             searchGroupBox.PerformLayout();
+            queryGroupBox.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)dataGridView).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -278,9 +391,17 @@
         private ToolStripMenuItem jSONToolStripMenuItem;
         private ToolStripMenuItem xMLToolStripMenuItem;
         private SplitContainer splitContainer1;
-        private RichTextBox textEditor;
+        private DataGridView dataGridView;
+        private ToolStripMenuItem exportToolStripMenuItem;
+        private ToolStripMenuItem hTMLToolStripMenuItem;
+        private SplitContainer splitContainer2;
         private GroupBox searchGroupBox;
-        private TextBox searchTextBox;
+        private Button clearSearchButton;
         private Button searchButton;
+        private TextBox searchTextBox;
+        private GroupBox queryGroupBox;
+        private Button runQuerryButton;
+        private FlowLayoutPanel flowLayoutPanel;
+        private Button clearQueryButton;
     }
 }

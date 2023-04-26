@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Postgraduates.utils.Converter;
+using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,7 +15,7 @@ using System.Threading.Tasks;
 
 namespace Postgraduates.model
 {
-    internal class Postgrad
+    internal class Postgrad : IXmlConvertible
     {
         public int Id { get; set; }
         public string Name { get; set; }
@@ -26,9 +28,9 @@ namespace Postgraduates.model
 
         public Postgrad() { }
 
-        public Postgrad(int id, string name, string faculty, string department, string major, string group, string formOfStudy, int beginningYear) 
+        public Postgrad(int id, string name, string faculty, string department, string major, string group, string formOfStudy, int beginningYear)
         {
-            Id = id; 
+            Id = id;
             Name = name;
             Faculty = faculty;
             Department = department;
@@ -36,7 +38,19 @@ namespace Postgraduates.model
             Group = group;
             FormOfStudy = formOfStudy;
             BeginningYear = beginningYear;
-        
+
         }
+
+        public override string ToString()
+        {
+            return $"{Id}; {Name}; {Faculty}; {Department}; {Major}; {Group}; {FormOfStudy}; {BeginningYear}";
+        }
+
+        public object[] ToDataRow()
+        {
+            return new object[] { Id, Name, Faculty, Department, Major, Group, FormOfStudy, BeginningYear };
+        }
+
     }
+
 }

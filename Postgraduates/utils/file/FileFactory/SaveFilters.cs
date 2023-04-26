@@ -9,9 +9,9 @@ namespace Postgraduates.utils.file.FileFactory
 {
     public static class SaveFilters
     {
-        private const string TEXT = "Text file (*.txt)|*.txt";
-        private const string HTML = "HTML file (*.html)|*.html";
-        private const string BINARY = "Binary file (*.bin)|*.bin";
+        public const string TEXT = "Text file (*.txt)|*.txt";
+        public const string HTML = "HTML file (*.html)|*.html";
+        public const string BINARY = "Binary file (*.bin)|*.bin";
 
         public static string All()
         {
