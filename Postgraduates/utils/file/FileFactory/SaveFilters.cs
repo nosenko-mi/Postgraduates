@@ -23,14 +23,11 @@ namespace Postgraduates.utils.file.FileFactory
             FileFactory factory;
             switch (filter)
             {
-                case TEXT:
-                    factory = new TextFileFactory();
-                    break;
                 case HTML:
                     factory = new HTMLFileFactory();
                     break;
                 default:
-                    factory = new TextFileFactory();
+                    factory = new HTMLFileFactory();
                     break;
             }
             return factory;

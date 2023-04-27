@@ -13,8 +13,19 @@ namespace Postgraduates.repository
     internal class PostgradRepository
     {
         public string FilePath { get; set; }
-        public PostgradRepository(string filePath) { FilePath = filePath; }
-        public PostgradRepository() { FilePath = ""; }
+
+        private QueryContext _context;
+
+        public PostgradRepository(string filePath)
+        { 
+            FilePath = filePath;
+            _context = new QueryContext(); 
+        }
+        public PostgradRepository() 
+        { 
+            FilePath = "";
+            _context = new QueryContext();
+        }
 
         public IEnumerable<Postgrad>? GetAll()
         {
@@ -23,21 +34,21 @@ namespace Postgraduates.repository
 
         public IEnumerable<Postgrad>? RunQuery(string[] queryParams)
         {
-            var context = new QueryContext();
+            //context = new QueryContext();
             if (queryParams[0].StartsWith('>'))
             {
-                context.SetStrategy(new QueryGreater());
+                _context.SetStrategy(new QueryGreater());
             }
             else if (queryParams[0].StartsWith('<'))
             {
-                context.SetStrategy(new QuerySmaller());
+                _context.SetStrategy(new QuerySmaller());
             }
             else
             {
-                context.SetStrategy(new QueryEqual());
+                _context.SetStrategy(new QueryEqual());
             }
 
-            var list = context.Execute(queryParams, FilePath);
+            var list = _context.Execute(queryParams, FilePath);
             return list;
         }
 

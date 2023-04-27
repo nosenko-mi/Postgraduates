@@ -17,7 +17,7 @@ namespace Postgraduates
     {
         private string _filePath;
         private bool textChanged;
-        private static readonly FileFactory _defaultFactory = new TextFileFactory();
+        private static readonly FileFactory _defaultFactory = new HTMLFileFactory();
         private FileFactory _factory = _defaultFactory;
         private PostgraduatesViewModel _viewModel = new PostgraduatesViewModel();
 
@@ -110,7 +110,7 @@ namespace Postgraduates
 
         private void openToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (this.openFileDialog.ShowDialog(this) == DialogResult.OK)
+            if (openFileDialog.ShowDialog(this) == DialogResult.OK)
             {
                 SaveChanges();
                 _filePath = openFileDialog.FileName;
@@ -185,7 +185,7 @@ namespace Postgraduates
             if (saveFileDialog.ShowDialog() == DialogResult.OK)
             {
                 var exporter = new HtmlExporter();
-                exporter.EportTable(
+                exporter.ExportTable(
                     (DataTable)(dataGridView.DataSource),
                     saveFileDialog.FileName);
             }

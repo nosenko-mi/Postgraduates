@@ -22,7 +22,6 @@ namespace Postgraduates.ViewModel
         private PostgradRepository _repository = new PostgradRepository();
         private List<Exam> _exams;
 
-
         public DataTable FindInTable(string text)
         {
             var list = TableLookUp.Find<Postgrad>(text, _postgrads);
@@ -33,8 +32,6 @@ namespace Postgraduates.ViewModel
 
         public DataTable RunQuery(string[] queryParams)
         {
-            XDocument xml = XDocument.Load(_filePath); // Load the XML document
-
             var list = _repository.RunQuery(queryParams);
             var converter = new PostgradConverter();
             var table = converter.ToDataTable(list);

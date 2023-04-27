@@ -29,7 +29,6 @@ namespace Postgraduates.utils.Converter
                 dt.Rows.Add(new object[] { p.Id, p.Name, p.Faculty, p.Department, p.Major, p.Group, p.FormOfStudy, p.BeginningYear });
             }
 
-            //var dt = list.ToDataTable();
             return dt;
         }
 
@@ -53,7 +52,6 @@ namespace Postgraduates.utils.Converter
                 });
             }
 
-            //var dt = list.ToDataTable();
             return postgrads;
         }
 
